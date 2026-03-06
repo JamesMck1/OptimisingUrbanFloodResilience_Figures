@@ -11,6 +11,8 @@ Utility/helper functions for plotting.
 # load packages
 import numpy as np
 import re
+import pandas as pd
+import os
 
 
 def load_mean_S_metric(file_path):
@@ -45,3 +47,71 @@ def natural_keys(text):
     (See Toothy's implementation in the comments)
     """
     return [atoi(c) for c in re.split(r'(\d+)', text)]
+
+
+def read_solutions(solutions_file):
+    """Read a Solutions.txt file to obtain front data (cost and risk)."""
+    if not os.path.exists(solutions_file):
+        print("Solutions.txt not found at: %s", solutions_file)
+
+    else:
+        # eMOEA produces a tab-separated file
+        try:
+            df = pd.read_csv(solutions_file, sep='\t')
+
+            # Verify the required columns exist
+            if 'Cost' in df.columns and 'Risk' in df.columns:
+                # Zip the two columns together and convert to a list of tuples
+                return list(zip(df['Cost'], df['Risk']))
+            else:
+                print("Error: 'Cost' or 'Risk' columns not found in the file.")
+                return []
+            
+        except pd.errors.EmptyDataError:
+            print("Solutions.txt is empty.")
+            df = pd.DataFrame()
+
+
+def non_dominated_sort(solutions):
+    """Perform a non-dominated sort."""
+    non_dominated = []
+
+    for i, solution in enumerate(solutions):
+        dominated = False
+        for j, other_solution in enumerate(solutions):
+            if i != j:
+                # Check if other_solution dominates solution
+                if ((other_solution[0] <= solution[0] and
+                        other_solution[1] <= solution[1]) and
+                        (other_solution[0] < solution[0] or
+                         other_solution[1] < solution[1])):
+                    dominated = True
+                    break
+        if not dominated:
+            non_dominated.append(solution)
+
+    return non_dominated
+
+
+def calculate_hypervolume_metric(solutions, reference_point):
+    """Calculate the hypervolume metric for a set of non-dominated points"""
+    # Sort solutions by cost (ascending order)
+    solutions.sort(key=lambda s: s[0])  # Sort by the first objective (cost)
+    solutions = non_dominated_sort(solutions)
+    solutions.sort(key=lambda s: s[0])  # Sort by the first objective (cost)
+    
+    x_ref, y_ref = reference_point
+    hypervolume = 0
+
+    # First point contribution
+    x0, y0 = solutions[0]
+    hypervolume += abs(x_ref - x0) * abs(y_ref - y0)
+
+    # Iterate through sorted solutions and calculate area contributions
+    for i in range(1, len(solutions)):
+        x1, y1 = solutions[i-1]
+        x2, y2 = solutions[i]
+        # Area of the rectangle formed by two consecutive points
+        hypervolume += abs(x_ref - x2) * abs(y1 - y2)
+
+    return hypervolume

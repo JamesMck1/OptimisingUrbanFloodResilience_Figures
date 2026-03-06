@@ -1,0 +1,18 @@
+lag generations	2
+convergence threshold	0.1
+maximum front size	16
+random generator	stochastic universal sampling
+replacement	False
+citycat config	6
+return period	50
+objective	damages
+binary coding	gray
+number of pavements	124
+pavements encoding length	124
+number of rain gardens	131
+rain gardens encoding length	131
+number of green areas	0
+green areas encoding length	0
+number of features	22
+total features encoding length	252
+total encoding length	507
