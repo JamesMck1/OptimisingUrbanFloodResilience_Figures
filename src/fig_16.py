@@ -23,7 +23,7 @@ def plot_fig_16():
     """
     # load data
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    data_dir = os.path.join(base_dir, '..', 'data')
+    data_dir = os.path.join(base_dir, '..', 'test_1_data')
 
     feasible_data = np.loadtxt(os.path.join(data_dir, 'All_data.txt'),
                                dtype=float, skiprows=1)
@@ -67,6 +67,8 @@ def plot_fig_16():
 
     with open(file_path, 'wb') as file:
         fig.savefig(file, format='png')
+
+    print(f'Figure 16 saved to: {file_path}')
 
     return feasible_data, pareto_data
 
