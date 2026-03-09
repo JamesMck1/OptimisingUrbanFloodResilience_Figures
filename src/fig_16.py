@@ -27,8 +27,7 @@ def plot_fig_16():
     base_dir = os.path.dirname(os.path.abspath(__file__))
     data_dir = os.path.join(base_dir, '..', 'test_1_data')
 
-    feasible_data = np.loadtxt(os.path.join(data_dir,
-                                            'All_data.txt'),
+    feasible_data = np.loadtxt(os.path.join(data_dir, 'All_data.txt'),
                                dtype=float, skiprows=1)
     n_f = feasible_data.shape[0]
     print(f'Loaded {n_f} Feasible Objective vectors.')
