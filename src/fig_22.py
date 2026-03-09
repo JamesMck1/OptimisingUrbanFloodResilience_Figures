@@ -46,12 +46,11 @@ def plot_fig_22():
     color_map = {'eMOEA': 'r',
                  'NSGA': 'b',
                  'SPEA': 'g'}
-    sims = []  # initialise a list for the total number of unique sims per alg
 
     # calculate a fixed reference point based on the worst objective vector
     cost_max, risk_max = 0, 0  # initialise worst objective vector
     cost_min, risk_min = 0, 0
-    for ix, algorithm in enumerate(algorithms):
+    for algorithm in algorithms:
         print(f'--- Plotting {algorithm} ---')
         # Locate all solution files for the specified algorithm
         base_dir = os.path.dirname(os.path.abspath(__file__))
