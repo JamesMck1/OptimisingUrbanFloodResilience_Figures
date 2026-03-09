@@ -18,6 +18,8 @@ import re
 
 from utils.utils import load_mean_S_metric
 from utils.utils import natural_keys
+from utils.utils import set_plot_defaults
+
 
 def plot_fig_17():
     """Reproduce Figure 17, a comparison of the algorithm convergence rates.
@@ -26,10 +28,7 @@ def plot_fig_17():
     evaluations for the three studied MOEAs with different maximum population
     sizes.
     """
-    # Set the formatting for high-quality output
-    mpl.rcParams['pdf.fonttype'] = 42
-    mpl.rcParams['ps.fonttype'] = 42
-    mpl.rcParams['font.family'] = 'Arial'
+    set_plot_defaults(mpl)
 
     # Locate all convergence data files in the specified folder structure
     base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -122,9 +121,9 @@ def plot_fig_17():
     # Adjust layout and save
     plt.tight_layout(rect=[0, 0, 1, 0.96])
     output_dir = os.path.join(base_dir, '..', 'figures')
-    output_path = os.path.join(output_dir, 'Figure_17.png')
+    output_path = os.path.join(output_dir, 'Figure_17.pdf')
     with open(output_path, 'wb') as file:
-        fig.savefig(file, format='png')
+        fig.savefig(file, format='pdf', dpi=600)
 
     print(f'Figure 17 saved to: {output_path}')
 

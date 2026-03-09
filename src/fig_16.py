@@ -11,9 +11,11 @@ Code used to reproduce Figure 16.
 # load packages
 import os
 import numpy as np
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 
 from utils.utils import non_dominated_sort
+from utils.utils import set_plot_defaults
 
 
 def plot_fig_16():
@@ -23,6 +25,7 @@ def plot_fig_16():
     test scenario. Pareto optimal vectors are highlighted in red with dominated
     vectors shown in grey.
     """
+    set_plot_defaults(mpl)
     # load data
     base_dir = os.path.dirname(os.path.abspath(__file__))
     data_dir = os.path.join(base_dir, '..', 'test_1_data')
@@ -64,15 +67,14 @@ def plot_fig_16():
     ax.set_ylabel('Number of Buildings at High Risk of Flooding')
     ax.legend()
     ax.grid(True, linestyle='--', alpha=0.7)
-    plt.show()
 
     output_dir = os.path.join(base_dir, '..', 'figures')
     if not os.path.exists(output_dir):
         os.mkdir(output_dir)
-    file_path = os.path.join(output_dir, 'Figure_16.png')
+    file_path = os.path.join(output_dir, 'Figure_16.pdf')
 
     with open(file_path, 'wb') as file:
-        fig.savefig(file, format='png')
+        fig.savefig(file, format='pdf', dpi=600)
 
     print(f'Figure 16 saved to: {file_path}')
 

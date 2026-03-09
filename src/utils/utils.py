@@ -15,6 +15,12 @@ import pandas as pd
 import os
 
 
+def set_plot_defaults(mpl):
+    """Set the formatting for high-quality output."""
+    mpl.rcParams['pdf.fonttype'] = 42
+    mpl.rcParams['ps.fonttype'] = 42
+    mpl.rcParams['font.family'] = 'Arial'
+
 def load_mean_S_metric(file_path):
     """Load mean S-metric data from a .txt file."""
     target_simulations = []

@@ -19,6 +19,8 @@ import pandas as pd
 
 from utils.utils import read_solutions
 from utils.utils import non_dominated_sort
+from utils.utils import set_plot_defaults
+
 
 def plot_fig_20():
     """Reproduce Figure 20, a comparison of the final solutions.
@@ -30,10 +32,7 @@ def plot_fig_20():
     to the set of all final solutions across all algorithms are highlighted with
     black dots.
     """
-    # Set the formatting for high-quality output
-    mpl.rcParams['pdf.fonttype'] = 42
-    mpl.rcParams['ps.fonttype'] = 42
-    mpl.rcParams['font.family'] = 'Arial'
+    set_plot_defaults(mpl)
 
     # Prepare figure and axes
     fig, ax = plt.subplots(1, 1, figsize=(10, 5))
@@ -115,9 +114,9 @@ def plot_fig_20():
     # Adjust layout and save
     plt.tight_layout(rect=[0, 0, 1, 0.96])
     output_dir = os.path.join(base_dir, '..', 'figures')
-    output_path = os.path.join(output_dir, 'Figure_20.png')
+    output_path = os.path.join(output_dir, 'Figure_20.pdf')
     with open(output_path, 'wb') as file:
-        fig.savefig(file, format='png')
+        fig.savefig(file, format='pdf', dpi=600)
 
     print(f'Figure 20 saved to: {output_path}')
 

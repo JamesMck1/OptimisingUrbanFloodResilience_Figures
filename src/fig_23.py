@@ -19,6 +19,8 @@ import pandas as pd
 
 from utils.utils import read_solutions
 from utils.utils import non_dominated_sort
+from utils.utils import set_plot_defaults
+
 
 def plot_fig_23():
     """Reproduce Figure 23, a comparison of the final solutions.
@@ -32,10 +34,7 @@ def plot_fig_23():
     points with respect to the set of all final solutions across all algorithms
     are highlighted with black dots.
     """
-    # Set the formatting for high-quality output
-    mpl.rcParams['pdf.fonttype'] = 42
-    mpl.rcParams['ps.fonttype'] = 42
-    mpl.rcParams['font.family'] = 'Arial'
+    set_plot_defaults(mpl)
 
     # Prepare figure and axes
     fig, (ax_1, ax_2) = plt.subplots(1, 2, figsize=(16, 5))
@@ -157,13 +156,12 @@ def plot_fig_23():
                    f'NSGA-II simulations = {final_sims[1]}, '
                    f'SPEA-2 simulations = {final_sims[2]}')
     
-
     # Adjust layout and save
     plt.tight_layout(rect=[0, 0, 1, 0.96])
     output_dir = os.path.join(base_dir, '..', 'figures')
-    output_path = os.path.join(output_dir, 'Figure_23.png')
+    output_path = os.path.join(output_dir, 'Figure_23.pdf')
     with open(output_path, 'wb') as file:
-        fig.savefig(file, format='png')
+        fig.savefig(file, format='pdf', dpi=600)
 
     print(f'Figure 23 saved to: {output_path}')
 
