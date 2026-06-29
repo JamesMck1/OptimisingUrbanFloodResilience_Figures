@@ -63,7 +63,17 @@ def read_solutions(solutions_file):
     else:
         # eMOEA produces a tab-separated file
         try:
-            df = pd.read_csv(solutions_file, sep='\t')
+            # df = pd.read_csv(solutions_file, sep='\t')
+            df = pd.read_csv(
+                solutions_file, 
+                sep='\t', 
+                dtype={
+                    'Genotype': str, 
+                    'Pavements': str, 
+                    'RainGardens': str, 
+                    'GreenAreas': str
+                }
+            )
 
             # Verify the required columns exist
             if 'Cost' in df.columns and 'Risk' in df.columns:

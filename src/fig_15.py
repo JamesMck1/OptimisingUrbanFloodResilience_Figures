@@ -1,0 +1,96 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Dec 22 14:23:35 2025.
+
+@author: James Mckenna
+
+~~~ fig_15.py ~~~
+Code used to reproduce Figure 15.
+"""
+
+# load packages
+import os
+import numpy as np
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+
+from utils.utils import non_dominated_sort
+from utils.utils import set_plot_defaults
+
+
+def plot_fig_15(extension='pdf'):
+    """Reproduce Figure 15, a plot of the feasible objective space.
+
+    A plot showing all 4096 feasible objective vectors for the 12 zonal feature
+    test scenario. Pareto optimal vectors are highlighted in red with dominated
+    vectors shown in grey.
+
+    Parameters
+    ----------
+    extension : string, optional
+        Chosen file extension for the output figure. Default value is 'pdf'.
+    """
+    set_plot_defaults(mpl)
+    # load data
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    data_dir = os.path.join(base_dir, '..', 'test_1_data')
+
+    feasible_data = np.loadtxt(os.path.join(data_dir, 'All_data.txt'),
+                               dtype=float, skiprows=1)
+    n_f = feasible_data.shape[0]
+    print(f'Loaded {n_f} Feasible Objective vectors.')
+
+    solutions_list = feasible_data.tolist()
+    pareto_list = non_dominated_sort(solutions_list)
+    pareto_data = np.array(pareto_list)
+    n_p = len(pareto_data)
+    print(f'Determined {n_p} Pareto-optimal vectors.')
+
+    fig, ax = plt.subplots(figsize=(10, 6))  # initialise figure
+
+    # plot all feasible objective vectors
+    ax.scatter(
+        feasible_data[:, 0], feasible_data[:, 1],
+        color='gray',
+        marker='x',
+        s=50,
+        alpha=0.6,
+        label=f'Feasible Objective Vectors (n={n_f})'
+    )
+
+    # plot Pareto-front
+    ax.scatter(
+        pareto_data[:, 0], pareto_data[:, 1],
+        color='red',
+        marker="*",
+        s=150,
+        label=f'Pareto Optimal Vectors (n={n_p})'
+    )
+
+    ax.set_title('Feasible Objective Space')
+    ax.set_xlabel('Implementation Cost (£ millions)')
+    ax.set_ylabel('Number of Buildings at High Risk of Flooding')
+    ax.legend()
+    ax.grid(True, linestyle='--', alpha=0.7)
+
+    output_dir = os.path.join(base_dir, '..', 'figures')
+    if not os.path.exists(output_dir):
+        os.mkdir(output_dir)
+    file_path = os.path.join(output_dir, f'Figure_15.{extension}')
+
+    with open(file_path, 'wb') as file:
+        fig.savefig(file, format=f'{extension}', dpi=600)
+
+    print(f'Figure 15 saved to: {file_path}')
+
+    return feasible_data, pareto_data
+
+
+###############################################################################
+# Testing
+###############################################################################
+
+
+if __name__ == "__main__":
+
+    test = plot_fig_15()

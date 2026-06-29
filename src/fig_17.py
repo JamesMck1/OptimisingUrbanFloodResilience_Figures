@@ -10,7 +10,6 @@ Code used to reproduce Figure 17.
 
 # load packages
 import os
-import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MultipleLocator
@@ -21,12 +20,17 @@ from utils.utils import natural_keys
 from utils.utils import set_plot_defaults
 
 
-def plot_fig_17():
+def plot_fig_17(extension='pdf'):
     """Reproduce Figure 17, a comparison of the algorithm convergence rates.
 
-    Comparison between the hyper-volume ratio versus the number of fitness
-    evaluations for the three studied MOEAs with different maximum population
-    sizes.
+    Performance of the algorithms for varying maximum archive sizes, shown
+    through plots of the hyper-volume ratio against the number of fitness
+    evaluations.
+
+    Parameters
+    ----------
+    extension : string, optional
+        Chosen file extension for the output figure. Default value is 'pdf'.
     """
     set_plot_defaults(mpl)
 
@@ -39,95 +43,81 @@ def plot_fig_17():
         for folder in os.listdir(data_dir) if pattern.match(folder)
     ]
 
+    print('Plotting population study from data in the following folders:')
+    for folder in convergence_folders:
+        print(f'{folder}')
+
     # Sort in human order for plotting (order of pop size)
     convergence_folders.sort(key=natural_keys)
 
     # Prepare figure and axes
-    num_plots = len(convergence_folders)
-    plots_per_col = int(0.5*num_plots)
-    fig, axs = plt.subplots(plots_per_col, 2, figsize=(18, 1.5*num_plots),
-                            sharex=True)
-    
-    pop_sizes = {'0': 'L',
-                 '1': '2L',
-                 '2': r'$|P|$',
-                 '3': r'$|2P|$'}
-    
-    # Loop through each folder and plot the S-metric for each algorithm
-    for idx, folder in enumerate(convergence_folders):
-        ax = axs[(idx-int(np.floor(idx/plots_per_col))*plots_per_col,
-                    int(np.floor(idx/plots_per_col)))]
+    fig, axes = plt.subplots(1, 3, figsize=(12, 4), sharey=True)
+    algorithms = ['epsilon MOEA', 'NSGA II', 'SPEA 2']
+    alg_map = {'epsilon MOEA': 'eMOEA',
+               'NSGA II': 'NSGA',
+               'SPEA 2': 'SPEA'}
+    label_map = {'eMOEA': r'$\epsilon$-MOEA',
+                 'NSGA': 'NSGA-II',
+                 'SPEA': 'SPEA-2'}
+    for ix, algorithm in enumerate(algorithms):
+        print(f'--- Plotting {algorithm} ---')
+        ax = axes[ix]
+        # Custom labelling
+        algorithm = alg_map.get(algorithm, algorithm)
 
-        ax.set_title(f'P = {pop_sizes[f"{idx}"]}', fontsize=12)
-        ax.set_ylabel('S-metric (%)', fontsize=10)
+        plot_title = label_map.get(algorithm, algorithm)
+        ax.set_title(f'{plot_title}', fontsize=12)
+        ax.set_xlabel('Unique Simulations', fontsize=10)
+        if ix == 0:
+            # Set shared y-axis label
+            ax.set_ylabel('S-metric (%)', fontsize=10)
 
-        # Colors and linestyles for each algorithm
-        colors = {'eMOEA': 'red', 'NSGA': 'blue', 'SPEA': 'green'}
-        linestyles = {'eMOEA': 'solid', 'NSGA': 'dashed', 'SPEA': 'dotted'}
+        # Colors and linestyles for each population size
+        pop_sizes = {'12': 'L', '24': '2L',
+                     '36': r'$|P|$', '72': r'$|2P|$'}
+        # Set specific color schemes per algorithm
+        if algorithm == 'eMOEA':
+            colors = {'12': 'lightcoral', '24': 'indianred',
+                      '36': 'firebrick', '72': 'darkred'}
+        elif algorithm == 'NSGA':
+            colors = {'12': 'lightskyblue', '24': 'cornflowerblue',
+                      '36': 'royalblue', '72': 'darkblue'}
+        elif algorithm == 'SPEA':
+            colors = {'12': 'lightgreen', '24': 'mediumseagreen',
+                      '36': 'forestgreen', '72': 'darkgreen'}
+        linestyles = {'12': 'solid', '24': 'dashed',
+                      '36': 'dotted', '72': 'dashdot'}
 
-        for algorithm, color in colors.items():
-            # Path to the S-metric data file for this algorithm
+        # Loop through each folder and plot the S-metric for each algorithm
+        for folder in convergence_folders:
+            print(os.path.basename(folder))
+            match = pattern.search(os.path.basename(folder))
+            pop = match.group(1)
+            pop_label = pop_sizes[f'{pop}']
+            color = colors[f'{pop}']
+            linestyle = linestyles[f'{pop}']
+
             file_path = os.path.join(folder, f"{algorithm} (mean).txt")
-            if os.path.exists(file_path):
-                target_simulations, mean_S_metric_data = load_mean_S_metric(
-                     file_path)
+            target_simulations, mean_S_metric_data = load_mean_S_metric(
+                file_path)
 
-                # Custom labelling
-                label_map = {'eMOEA': r'$\epsilon$-MOEA',
-                                'NSGA': 'NSGA-II',
-                                'SPEA': 'SPEA-2'}
-                plot_label = label_map.get(algorithm, algorithm)
+            # Plot mean S-metric data
+            ax.plot(target_simulations, mean_S_metric_data,
+                    label=pop_label, color=color, linestyle=linestyle)
 
-                # Plot mean S-metric data
-                ax.plot(target_simulations, mean_S_metric_data,
-                        label=plot_label, color=color,
-                        linestyle=linestyles[algorithm])
-                
-        # plot self-termination time
-        file_path = os.path.join(folder, "eMOEA termination.txt")
-        if not os.path.exists(file_path):
-            raise FileNotFoundError(f'Unable to find {file_path}.')
-        termination_times = []
-        with open(file_path, 'r') as f:
-            next(f)
-
-            for line in f:
-                row = line.strip().split('\t')
-                if row[0] == 'Average':
-                        continue
-                try:
-                    t_val = float(row[1]) 
-                    termination_times.append(t_val)
-                except (ValueError, IndexError):
-                    pass
-
-        if termination_times:
-            average_t = np.mean(termination_times)
-            std_dev = np.std(termination_times)
-            ax.axvline(average_t, color='c', linestyle='dashed',
-                        linewidth=2, alpha=0.75, label='Avg. Termination')
-            ax.axvspan(average_t - std_dev, average_t + std_dev,
-                        color='c', alpha=0.2, linewidth=0)
-
-        # Formatting adjustments
-        ax.grid(True, which='both', linestyle='--', linewidth=0.5)
-        ax.legend(fontsize=9)
-        ax.yaxis.set_major_locator(MultipleLocator(10))
-
-    # Set common x-label for the shared x-axis
-    axs[(plots_per_col-1, 0)].set_xlabel('Unique Simulations', fontsize=10)
-    axs[(plots_per_col-1, 1)].set_xlabel('Unique Simulations', fontsize=10)
+            # Formatting adjustments
+            ax.grid(True, which='both', linestyle='--', linewidth=0.5)
+            ax.legend(fontsize=9)
+            ax.yaxis.set_major_locator(MultipleLocator(10))
 
     # Adjust layout and save
     plt.tight_layout(rect=[0, 0, 1, 0.96])
     output_dir = os.path.join(base_dir, '..', 'figures')
-    output_path = os.path.join(output_dir, 'Figure_17.pdf')
+    output_path = os.path.join(output_dir, f'Figure_17.{extension}')
     with open(output_path, 'wb') as file:
-        fig.savefig(file, format='pdf', dpi=600)
+        fig.savefig(file, format=f'{extension}', dpi=600)
 
     print(f'Figure 17 saved to: {output_path}')
-
-    return target_simulations, mean_S_metric_data, termination_times
 
 
 ###############################################################################

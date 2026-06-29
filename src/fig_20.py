@@ -18,19 +18,22 @@ import re
 import pandas as pd
 
 from utils.utils import read_solutions
-from utils.utils import non_dominated_sort
+from utils.utils import calculate_hypervolume_metric
+from utils.utils import natural_keys
 from utils.utils import set_plot_defaults
 
 
-def plot_fig_20():
-    """Reproduce Figure 20, a comparison of the final solutions.
+def plot_fig_20(extension='pdf'):
+    """Reproduce Figure 20, a comparison of the algorithm convergence rates.
 
-    Comparison between the final solutions for the three MOEAs after
-    self-termination (e-MOEA) or ~3000 simulations (benchmark algorithms). The
-    worst objective vector is used as the fixed reference point for the
-    calculation of the performance metric. The non-dominated points with respect
-    to the set of all final solutions across all algorithms are highlighted with
-    black dots.
+    Comparison between the hyper-volume indicator, labelled as the S-metric,
+    per unique simulation for the proposed epsilon-MOEA with respect to the
+    NSGA-2 and SPEA-2.
+
+    Parameters
+    ----------
+    extension : string, optional
+        Chosen file extension for the output figure. Default value is 'pdf'.
     """
     set_plot_defaults(mpl)
 
@@ -46,9 +49,11 @@ def plot_fig_20():
     color_map = {'eMOEA': 'r',
                  'NSGA': 'b',
                  'SPEA': 'g'}
-    sims = []  # initialise a list for the total number of unique sims per alg
+
+    # calculate a fixed reference point based on the worst objective vector
     cost_max, risk_max = 0, 0  # initialise worst objective vector
-    for ix, algorithm in enumerate(algorithms):
+    cost_min, risk_min = 0, 0
+    for algorithm in algorithms:
         print(f'--- Plotting {algorithm} ---')
         # Locate all solution files for the specified algorithm
         base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -63,60 +68,55 @@ def plot_fig_20():
             solutions = read_solutions(solution_file)
             for solution in solutions:
                 cost_max = max(cost_max, solution[0])
+                cost_min = min(cost_min, solution[0])
                 risk_max = max(risk_max, solution[1])
+                risk_min = max(risk_min, solution[1])
 
-        final_solution_file = os.path.join(data_dir, 'Solutions.txt')
-        all_solutions = read_solutions(final_solution_file)
-        all_costs, all_risks = zip(*all_solutions)
+    reference_cost = cost_max + 0.1*(abs(cost_max - cost_min))
+    reference_risk = risk_max + 0.1*(abs(risk_max - risk_min))
+    reference_point = (reference_cost, reference_risk)
 
-        # filter only non-dominated solutions
-        pareto_solutions = non_dominated_sort(all_solutions)
-        pareto_costs, pareto_risks = zip(*pareto_solutions)
-
-        # convert costs to £ millions (damages are already in £ millions)
-        all_costs = np.array(all_costs)*1e-6
-        pareto_costs = np.array(pareto_costs)*1e-6
-
+    # plot convergence
+    for algorithm in algorithms:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        data_dir = os.path.join(base_dir, '..', 'test_2_data', f'{algorithm}')
+        simulations_file = os.path.join(data_dir, 'unique_simulations.txt')
+        sim_data = pd.read_csv(simulations_file, header=None)
+        no_sims = sim_data.loc[:, 0]
+        s_metrics = []
+        pattern = re.compile(r'^Generation_(\d+)_Solutions\.txt$')
+        matching_files = [folder for folder in os.listdir(data_dir)
+                          if pattern.match(folder)]
+        matching_files.sort(key=natural_keys)
+        solution_files = [os.path.join(data_dir, folder)
+                          for folder in matching_files]
+        
+        for solution_file in solution_files:
+            solutions = read_solutions(solution_file)
+            s_metrics.append(calculate_hypervolume_metric(solutions,
+                                                          reference_point))
+            
         algorithm = alg_map.get(algorithm, algorithm)
         label = label_map.get(algorithm, algorithm)
-        if algorithm != 'eMOEA':
-            ax.scatter(all_costs, all_risks, marker='x', alpha=0.2, s=100,
-                    color=color_map[algorithm], label=f'{label}')
-        ax.scatter(pareto_costs, pareto_risks, marker='X', alpha=0.6,
-                   s=100, color=color_map[algorithm],
-                   label=f'{label} (non-dominated)')
-
-        simulations_file = os.path.join(data_dir, 'unique_simulations.txt')
-        no_sims = pd.read_csv(simulations_file, header=None)
-        sims.append(no_sims.iloc[-1, 0])
-
-    # plot worst objective vector
-    cost_max = cost_max*1e-6  # convert to £ millions
-    ax.scatter(cost_max, risk_max, marker='v', alpha=0.8, s=150, color='gray',
-               label='Worst Objective Vector')
-    ax.axvline(cost_max, linestyle='dashed', color='gray', alpha=0.8)
-    ax.axhline(risk_max, linestyle='dashed', color='gray', alpha=0.8)
+        
+        # Plot the sorted, aligned data
+        ax.plot(no_sims, s_metrics, linestyle='dashed',
+                color=color_map[algorithm], label=f'{label}')
 
     # Formatting adjustments
     ax.grid(True, which='both', linestyle='--', linewidth=0.5)
     ax.legend(fontsize=9, loc='lower right')
-    ax.yaxis.set_major_locator(MultipleLocator(1))
-    ax.xaxis.set_major_locator(MultipleLocator(1))
 
-    ax.set_title('Final Solutions\n'
-                 r'$\epsilon$-MOEA'f' simulations = {sims[0]}, '
-                 f'NSGA-II simulations = {sims[1]}, '
-                 f'SPEA-2 simulations = {sims[2]}')
-    ax.set_xlabel('Cost (£ millions)', fontsize=10)
-    ax.set_ylabel('Estimated Cost of Damages due to Flooding (£ millions)',
-                  fontsize=10)
+    ax.set_title('Convergence')
+    ax.set_xlabel('Number of Unique Simulations', fontsize=10)
+    ax.set_ylabel('Convergence Measure (S-metric)', fontsize=10)
 
     # Adjust layout and save
     plt.tight_layout(rect=[0, 0, 1, 0.96])
     output_dir = os.path.join(base_dir, '..', 'figures')
-    output_path = os.path.join(output_dir, 'Figure_20.pdf')
+    output_path = os.path.join(output_dir, f'Figure_20.{extension}')
     with open(output_path, 'wb') as file:
-        fig.savefig(file, format='pdf', dpi=600)
+        fig.savefig(file, format=f'{extension}', dpi=600)
 
     print(f'Figure 20 saved to: {output_path}')
 

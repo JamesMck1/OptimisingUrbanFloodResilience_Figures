@@ -4,8 +4,8 @@ Created on Mon Dec 22 14:23:35 2025.
 
 @author: James Mckenna
 
-~~~ fig_22.py ~~~
-Code used to reproduce Figure 22.
+~~~ appendices.py ~~~
+Code used to reproduce figures contained within the Appendices.
 """
 
 # load packages
@@ -23,12 +23,16 @@ from utils.utils import natural_keys
 from utils.utils import set_plot_defaults
 
 
-def plot_fig_22():
-    """Reproduce Figure 22, a comparison of the algorithm convergence rates.
+def plot_appendices(extension='pdf'):
+    """Reproduce the appendices: flood map plots of each optimal solution.
 
-    Comparison between the hyper-volume indicator, labelled as the S-metric,
-    per unique simulation for the proposed epsilon-MOEA with respect to the
-    NSGA-2 and SPEA-2.
+    Produce detailed flood maps for each of the optimal solutions discovered by
+    the epsilon-MOEA algorithm.
+
+    Parameters
+    ----------
+    extension : string, optional
+        Chosen file extension for the output figure. Default value is 'pdf'.
     """
     set_plot_defaults(mpl)
 
@@ -109,11 +113,11 @@ def plot_fig_22():
     # Adjust layout and save
     plt.tight_layout(rect=[0, 0, 1, 0.96])
     output_dir = os.path.join(base_dir, '..', 'figures')
-    output_path = os.path.join(output_dir, 'Figure_22.pdf')
+    output_path = os.path.join(output_dir, f'Figure_20.{extension}')
     with open(output_path, 'wb') as file:
-        fig.savefig(file, format='pdf', dpi=600)
+        fig.savefig(file, format=f'{extension}', dpi=600)
 
-    print(f'Figure 22 saved to: {output_path}')
+    print(f'Figure 20 saved to: {output_path}')
 
 
 ###############################################################################
@@ -123,4 +127,4 @@ def plot_fig_22():
 
 if __name__ == "__main__":
 
-    test = plot_fig_22()
+    test = plot_appendices()

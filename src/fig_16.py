@@ -13,72 +13,126 @@ import os
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+from matplotlib.ticker import MultipleLocator
+import re
 
-from utils.utils import non_dominated_sort
+from utils.utils import load_mean_S_metric
+from utils.utils import natural_keys
 from utils.utils import set_plot_defaults
 
 
-def plot_fig_16():
-    """Reproduce Figure 16, a plot of the feasible objective space.
+def plot_fig_16(extension='pdf'):
+    """Reproduce Figure 16, a comparison of the algorithm convergence rates.
 
-    A plot showing all 4096 feasible objective vectors for the 12 zonal feature
-    test scenario. Pareto optimal vectors are highlighted in red with dominated
-    vectors shown in grey.
+    Comparison between the hyper-volume ratio versus the number of fitness
+    evaluations for the three studied MOEAs with different maximum population
+    sizes.
+
+    Parameters
+    ----------
+    extension : string, optional
+        Chosen file extension for the output figure. Default value is 'pdf'.
     """
     set_plot_defaults(mpl)
-    # load data
+
+    # Locate all convergence data files in the specified folder structure
     base_dir = os.path.dirname(os.path.abspath(__file__))
     data_dir = os.path.join(base_dir, '..', 'test_1_data')
+    pattern = re.compile(r'^n = (\d+)$')
+    convergence_folders = [
+        os.path.join(data_dir, folder)
+        for folder in os.listdir(data_dir) if pattern.match(folder)
+    ]
 
-    feasible_data = np.loadtxt(os.path.join(data_dir, 'All_data.txt'),
-                               dtype=float, skiprows=1)
-    n_f = feasible_data.shape[0]
-    print(f'Loaded {n_f} Feasible Objective vectors.')
+    # Sort in human order for plotting (order of pop size)
+    convergence_folders.sort(key=natural_keys)
 
-    solutions_list = feasible_data.tolist()
-    pareto_list = non_dominated_sort(solutions_list)
-    pareto_data = np.array(pareto_list)
-    n_p = len(pareto_data)
-    print(f'Determined {n_p} Pareto-optimal vectors.')
+    # Prepare figure and axes
+    num_plots = len(convergence_folders)
+    plots_per_col = int(0.5*num_plots)
+    fig, axs = plt.subplots(plots_per_col, 2, figsize=(18, 1.5*num_plots),
+                            sharex=True)
+    
+    pop_sizes = {'0': 'L',
+                 '1': '2L',
+                 '2': r'$|P|$',
+                 '3': r'$|2P|$'}
+    
+    # Loop through each folder and plot the S-metric for each algorithm
+    for idx, folder in enumerate(convergence_folders):
+        ax = axs[(idx-int(np.floor(idx/plots_per_col))*plots_per_col,
+                    int(np.floor(idx/plots_per_col)))]
 
-    fig, ax = plt.subplots(figsize=(10, 6))  # initialise figure
+        ax.set_title(f'P = {pop_sizes[f"{idx}"]}', fontsize=12)
+        ax.set_ylabel('S-metric (%)', fontsize=10)
 
-    # plot all feasible objective vectors
-    ax.scatter(
-        feasible_data[:, 0], feasible_data[:, 1],
-        color='gray',
-        marker='x',
-        s=50,
-        alpha=0.6,
-        label=f'Feasible Objective Vectors (n={n_f})'
-    )
+        # Colors and linestyles for each algorithm
+        colors = {'eMOEA': 'red', 'NSGA': 'blue', 'SPEA': 'green'}
+        linestyles = {'eMOEA': 'solid', 'NSGA': 'dashed', 'SPEA': 'dotted'}
 
-    # plot Pareto-front
-    ax.scatter(
-        pareto_data[:, 0], pareto_data[:, 1],
-        color='red',
-        marker="*",
-        s=150,
-        label=f'Pareto Optimal Vectors (n={n_p})'
-    )
+        for algorithm, color in colors.items():
+            # Path to the S-metric data file for this algorithm
+            file_path = os.path.join(folder, f"{algorithm} (mean).txt")
+            if os.path.exists(file_path):
+                target_simulations, mean_S_metric_data = load_mean_S_metric(
+                     file_path)
 
-    ax.set_title('Feasible Objective Space')
-    ax.set_xlabel('Implementation Cost (£ millions)')
-    ax.set_ylabel('Number of Buildings at High Risk of Flooding')
-    ax.legend()
-    ax.grid(True, linestyle='--', alpha=0.7)
+                # Custom labelling
+                label_map = {'eMOEA': r'$\epsilon$-MOEA',
+                                'NSGA': 'NSGA-II',
+                                'SPEA': 'SPEA-2'}
+                plot_label = label_map.get(algorithm, algorithm)
 
+                # Plot mean S-metric data
+                ax.plot(target_simulations, mean_S_metric_data,
+                        label=plot_label, color=color,
+                        linestyle=linestyles[algorithm])
+                
+        # plot self-termination time
+        file_path = os.path.join(folder, "eMOEA termination.txt")
+        if not os.path.exists(file_path):
+            raise FileNotFoundError(f'Unable to find {file_path}.')
+        termination_times = []
+        with open(file_path, 'r') as f:
+            next(f)
+
+            for line in f:
+                row = line.strip().split('\t')
+                if row[0] == 'Average':
+                        continue
+                try:
+                    t_val = float(row[1]) 
+                    termination_times.append(t_val)
+                except (ValueError, IndexError):
+                    pass
+
+        if termination_times:
+            average_t = np.mean(termination_times)
+            std_dev = np.std(termination_times)
+            ax.axvline(average_t, color='c', linestyle='dashed',
+                        linewidth=2, alpha=0.75, label='Avg. Termination')
+            ax.axvspan(average_t - std_dev, average_t + std_dev,
+                        color='c', alpha=0.2, linewidth=0)
+
+        # Formatting adjustments
+        ax.grid(True, which='both', linestyle='--', linewidth=0.5)
+        ax.legend(fontsize=9)
+        ax.yaxis.set_major_locator(MultipleLocator(10))
+
+    # Set common x-label for the shared x-axis
+    axs[(plots_per_col-1, 0)].set_xlabel('Unique Simulations', fontsize=10)
+    axs[(plots_per_col-1, 1)].set_xlabel('Unique Simulations', fontsize=10)
+
+    # Adjust layout and save
+    plt.tight_layout(rect=[0, 0, 1, 0.96])
     output_dir = os.path.join(base_dir, '..', 'figures')
-    if not os.path.exists(output_dir):
-        os.mkdir(output_dir)
-    file_path = os.path.join(output_dir, 'Figure_16.pdf')
+    output_path = os.path.join(output_dir, f'Figure_16.{extension}')
+    with open(output_path, 'wb') as file:
+        fig.savefig(file, format=f'{extension}', dpi=600)
 
-    with open(file_path, 'wb') as file:
-        fig.savefig(file, format='pdf', dpi=600)
+    print(f'Figure 16 saved to: {output_path}')
 
-    print(f'Figure 16 saved to: {file_path}')
-
-    return feasible_data, pareto_data
+    return target_simulations, mean_S_metric_data, termination_times
 
 
 ###############################################################################

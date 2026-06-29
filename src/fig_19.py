@@ -4,8 +4,8 @@ Created on Mon Dec 22 14:23:35 2025.
 
 @author: James Mckenna
 
-~~~ fig_23.py ~~~
-Code used to reproduce Figure 23.
+~~~ fig_19.py ~~~
+Code used to reproduce Figure 19.
 """
 
 # load packages
@@ -22,8 +22,8 @@ from utils.utils import non_dominated_sort
 from utils.utils import set_plot_defaults
 
 
-def plot_fig_23():
-    """Reproduce Figure 23, a comparison of the final solutions.
+def plot_fig_19(extension='pdf'):
+    """Reproduce Figure 19, a comparison of the final solutions.
 
     Comparison between the final solutions for the three MOEAs. Sub-figure (a)
     shows the final solutions after self-termination of the eMOEA algorithm
@@ -33,11 +33,16 @@ def plot_fig_23():
     point for the calculation of the performance metric. The non-dominated
     points with respect to the set of all final solutions across all algorithms
     are highlighted with black dots.
+
+    Parameters
+    ----------
+    extension : string, optional
+        Chosen file extension for the output figure. Default value is 'pdf'.
     """
     set_plot_defaults(mpl)
 
     # Prepare figure and axes
-    fig, (ax_1, ax_2) = plt.subplots(1, 2, figsize=(16, 5))
+    fig, (ax_1, ax_2) = plt.subplots(2, 1, figsize=(12, 12))
     algorithms = ['emoea', 'nsga', 'spea']
     alg_map = {'emoea': 'eMOEA',
                'nsga': 'NSGA',
@@ -159,11 +164,11 @@ def plot_fig_23():
     # Adjust layout and save
     plt.tight_layout(rect=[0, 0, 1, 0.96])
     output_dir = os.path.join(base_dir, '..', 'figures')
-    output_path = os.path.join(output_dir, 'Figure_23.pdf')
+    output_path = os.path.join(output_dir, f'Figure_19.{extension}')
     with open(output_path, 'wb') as file:
-        fig.savefig(file, format='pdf', dpi=600)
+        fig.savefig(file, format=f'{extension}', dpi=600)
 
-    print(f'Figure 23 saved to: {output_path}')
+    print(f'Figure 19 saved to: {output_path}')
 
 
 ###############################################################################
@@ -173,4 +178,4 @@ def plot_fig_23():
 
 if __name__ == "__main__":
 
-    test = plot_fig_23()
+    test = plot_fig_19()
