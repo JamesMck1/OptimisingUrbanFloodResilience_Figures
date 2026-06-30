@@ -1,0 +1,12 @@
+Summary of Exposure Analysis for: R50_C6_G0_max_depth.csv
+
+Input folder: c:\ProgramData\Water_Blade_Programs\JM\opti_docker_v6\CityCAT_setup\R50C6G0_SurfaceMaps
+ Buildings: c:\ProgramData\Water_Blade_Programs\JM\opti_docker_v6\data\inputs\buildings\buildings.shp
+
+Number of depth files: 1
+Number of Buildings: 9623
+Grid Resolution: 4.0m
+Buffer Distance: 100% or 4.0m
+
+Total Estimated Damages: 155001018.0
+

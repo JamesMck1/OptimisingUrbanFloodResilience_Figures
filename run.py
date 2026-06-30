@@ -21,6 +21,7 @@ from src.fig_16 import plot_fig_16
 from src.fig_17 import plot_fig_17
 from src.fig_19 import plot_fig_19
 from src.fig_20 import plot_fig_20
+from src.appendices import plot_appendices
 
 ################################################################################
 # Plotting
@@ -34,3 +35,4 @@ plot_fig_16(extension)
 plot_fig_17(extension)
 plot_fig_19(extension)
 plot_fig_20(extension)
+plot_appendices(extension)

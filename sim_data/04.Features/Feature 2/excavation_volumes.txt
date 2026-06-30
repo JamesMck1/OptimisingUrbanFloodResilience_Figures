@@ -1,0 +1,257 @@
+feature excavation_volume
+h0r0x0y0 0.0
+h0r0x0y1 0.0
+h0r0x0y2 
+h0r0x0y3 
+h0r0x1y0 
+h0r0x1y1 0.0
+h0r0x1y2 
+h0r0x1y3 
+h0r0x2y0 
+h0r0x2y1 
+h0r0x2y2 
+h0r0x2y3 
+h0r0x3y0 0.0
+h0r0x3y1 
+h0r0x3y2 0.0
+h0r0x3y3 
+h0r1x0y0 
+h0r1x0y1 
+h0r1x0y2 0.0
+h0r1x0y3 
+h0r1x1y0 
+h0r1x1y1 
+h0r1x1y2 
+h0r1x1y3 
+h0r1x2y0 
+h0r1x2y1 
+h0r1x2y2 0.0
+h0r1x2y3 
+h0r1x3y0 
+h0r1x3y1 
+h0r1x3y2 
+h0r1x3y3 
+h0r2x0y0 
+h0r2x0y1 
+h0r2x0y2 
+h0r2x0y3 
+h0r2x1y0 0.0
+h0r2x1y1 
+h0r2x1y2 
+h0r2x1y3 
+h0r2x2y0 
+h0r2x2y1 
+h0r2x2y2 
+h0r2x2y3 
+h0r2x3y0 
+h0r2x3y1 
+h0r2x3y2 0.0
+h0r2x3y3 
+h0r3x0y0 
+h0r3x0y1 
+h0r3x0y2 
+h0r3x0y3 
+h0r3x1y0 
+h0r3x1y1 0.0
+h0r3x1y2 
+h0r3x1y3 
+h0r3x2y0 
+h0r3x2y1 
+h0r3x2y2 
+h0r3x2y3 
+h0r3x3y0 
+h0r3x3y1 
+h0r3x3y2 
+h0r3x3y3 
+h1r0x0y0 
+h1r0x0y1 96.0
+h1r0x0y2 
+h1r0x0y3 
+h1r0x1y0 
+h1r0x1y1 96.0
+h1r0x1y2 
+h1r0x1y3 
+h1r0x2y0 
+h1r0x2y1 
+h1r0x2y2 72.0
+h1r0x2y3 
+h1r0x3y0 
+h1r0x3y1 96.0
+h1r0x3y2 80.0
+h1r0x3y3 56.0
+h1r1x0y0 
+h1r1x0y1 
+h1r1x0y2 
+h1r1x0y3 
+h1r1x1y0 
+h1r1x1y1 144.0
+h1r1x1y2 
+h1r1x1y3 112.0
+h1r1x2y0 
+h1r1x2y1 
+h1r1x2y2 
+h1r1x2y3 
+h1r1x3y0 
+h1r1x3y1 
+h1r1x3y2 128.0
+h1r1x3y3 
+h1r2x0y0 
+h1r2x0y1 
+h1r2x0y2 
+h1r2x0y3 
+h1r2x1y0 256.0
+h1r2x1y1 248.0
+h1r2x1y2 
+h1r2x1y3 
+h1r2x2y0 
+h1r2x2y1 
+h1r2x2y2 
+h1r2x2y3 160.0
+h1r2x3y0 
+h1r2x3y1 
+h1r2x3y2 
+h1r2x3y3 
+h1r3x0y0 
+h1r3x0y1 
+h1r3x0y2 
+h1r3x0y3 
+h1r3x1y0 
+h1r3x1y1 
+h1r3x1y2 
+h1r3x1y3 
+h1r3x2y0 336.0
+h1r3x2y1 
+h1r3x2y2 
+h1r3x2y3 
+h1r3x3y0 
+h1r3x3y1 
+h1r3x3y2 
+h1r3x3y3 
+h2r0x0y0 
+h2r0x0y1 
+h2r0x0y2 
+h2r0x0y3 
+h2r0x1y0 
+h2r0x1y1 
+h2r0x1y2 192.0
+h2r0x1y3 
+h2r0x2y0 
+h2r0x2y1 176.0
+h2r0x2y2 
+h2r0x2y3 
+h2r0x3y0 
+h2r0x3y1 192.0
+h2r0x3y2 160.0
+h2r0x3y3 
+h2r1x0y0 
+h2r1x0y1 
+h2r1x0y2 
+h2r1x0y3 288.0
+h2r1x1y0 
+h2r1x1y1 
+h2r1x1y2 
+h2r1x1y3 
+h2r1x2y0 
+h2r1x2y1 
+h2r1x2y2 
+h2r1x2y3 240.0
+h2r1x3y0 
+h2r1x3y1 
+h2r1x3y2 256.0
+h2r1x3y3 
+h2r2x0y0 
+h2r2x0y1 464.0
+h2r2x0y2 
+h2r2x0y3 
+h2r2x1y0 
+h2r2x1y1 
+h2r2x1y2 
+h2r2x1y3 
+h2r2x2y0 
+h2r2x2y1 
+h2r2x2y2 
+h2r2x2y3 
+h2r2x3y0 
+h2r2x3y1 
+h2r2x3y2 
+h2r2x3y3 
+h2r3x0y0 
+h2r3x0y1 672.0
+h2r3x0y2 608.0
+h2r3x0y3 
+h2r3x1y0 
+h2r3x1y1 
+h2r3x1y2 
+h2r3x1y3 
+h2r3x2y0 
+h2r3x2y1 624.0
+h2r3x2y2 
+h2r3x2y3 
+h2r3x3y0 654.3832275390625
+h2r3x3y1 
+h2r3x3y2 496.0
+h2r3x3y3 
+h3r0x0y0 
+h3r0x0y1 
+h3r0x0y2 264.0
+h3r0x0y3 
+h3r0x1y0 
+h3r0x1y1 
+h3r0x1y2 
+h3r0x1y3 
+h3r0x2y0 
+h3r0x2y1 264.0
+h3r0x2y2 
+h3r0x2y3 
+h3r0x3y0 
+h3r0x3y1 288.0
+h3r0x3y2 240.0
+h3r0x3y3 
+h3r1x0y0 
+h3r1x0y1 
+h3r1x0y2 
+h3r1x0y3 
+h3r1x1y0 
+h3r1x1y1 
+h3r1x1y2 
+h3r1x1y3 
+h3r1x2y0 456.0
+h3r1x2y1 
+h3r1x2y2 
+h3r1x2y3 
+h3r1x3y0 
+h3r1x3y1 
+h3r1x3y2 
+h3r1x3y3 312.0
+h3r2x0y0 
+h3r2x0y1 
+h3r2x0y2 
+h3r2x0y3 
+h3r2x1y0 768.0
+h3r2x1y1 
+h3r2x1y2 
+h3r2x1y3 
+h3r2x2y0 
+h3r2x2y1 
+h3r2x2y2 
+h3r2x2y3 480.0
+h3r2x3y0 
+h3r2x3y1 
+h3r2x3y2 
+h3r2x3y3 
+h3r3x0y0 1056.0
+h3r3x0y1 1008.0
+h3r3x0y2 
+h3r3x0y3 
+h3r3x1y0 1104.0
+h3r3x1y1 1008.0
+h3r3x1y2 912.0
+h3r3x1y3 
+h3r3x2y0 
+h3r3x2y1 
+h3r3x2y2 
+h3r3x2y3 648.0
+h3r3x3y0 
+h3r3x3y1 
+h3r3x3y2 744.0
+h3r3x3y3 

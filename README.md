@@ -34,14 +34,17 @@ running the scripts:
 ├── src/
 │   ├── utils/
 │   │   ├── __init__.py
-│   │   └── utils.py          # Helper functions
-│   ├── fig_16.py             # Plots the feasible objective space
-│   ├── fig_17.py             # Compares algorithm convergence rates (S-metric)
-│   ├── fig_18.py             # Performance for varying maximum archive sizes
-│   ├── fig_20.py             # Final solutions comparison 1
-│   ├── fig_21.py             # Final solutions comparison 2
-│   ├── fig_22.py             # S-metric convergence per unique simulation
-│   └── fig_23.py             # Comparative sub-plots of final solutions
-├── test_1_data/              # Data for Figures 16, 17, and 18
-├── test_2_data/              # Data for Figures 20, 21, 22, and 23
+│   │   └── binary_encoding.py     # Genotype <-> phenotype mapping
+│   │   └── plot_solutions.py      # Flood map plotting
+│   │   └── utils.py               # Other helper functions
+│   ├── appendices.py         # Plots the figures in the appendices
+│   ├── fig_15.py             # Plots the feasible objective space
+│   ├── fig_16.py             # Compares algorithm convergence rates (S-metric)
+│   ├── fig_17.py             # Performance for varying maximum archive sizes
+│   ├── fig_19.py             # Final solutions comparison
+│   ├── fig_20.py             # S-metric convergence per unique simulation
+│   ├── fig_22.py             # 
+├── sim_data/                 # Data for Appendices
+├── test_1_data/              # Data for Figures 15, 16, and 17
+├── test_2_data/              # Data for Figures 19 and 20
 └── figures/                  # Automatically generated output folder for plots
