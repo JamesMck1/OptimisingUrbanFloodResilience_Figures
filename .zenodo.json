@@ -1,0 +1,33 @@
+{
+  "title": "Datasets and Code for: Optimising Urban Flood Resilience",
+  "description": "This repository contains the datasets and code required to produce the visualisations for the associated manuscript submitted to Water Resources Research.",
+  "upload_type": "software",
+  "creators": [
+    {
+      "name": "Mckenna, James",
+      "affiliation": "Newcastle University",
+      "orcid": "0000-0002-5361-3201"
+    },
+    {
+      "name": "Iliadis, Christos",
+      "affiliation": "Newcastle University",
+      "orcid": "0000-0002-1181-3686"
+    },
+    {
+      "name": "Glenis, Vassilis",
+      "affiliation": "Newcastle University",
+      "orcid": "0000-0001-6037-9508"
+    }
+  ],
+  "access_right": "open",
+  "license": "MIT",
+  "version": "1.0.0",
+  "keywords": [
+    "Water Resources Research",
+    "Data Visualisation",
+    "Optimisation",
+    "Hydrodynamic Modelling",
+    "Blue-Green Infrastructure",
+    "Flood Resilience"
+  ]
+}
