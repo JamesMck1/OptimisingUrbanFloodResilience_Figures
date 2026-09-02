@@ -1,6 +1,6 @@
 {
   "title": "Datasets and Code for: Optimising Urban Flood Resilience",
-  "description": "This repository contains the datasets and code required to produce the visualisations for the associated manuscript submitted to Water Resources Research.",
+  "description": "This repository contains the datasets and code required to produce the visualisations for the associated manuscript submitted to Advances in Engineering Software.",
   "upload_type": "software",
   "creators": [
     {
@@ -23,7 +23,7 @@
   "license": "MIT",
   "version": "1.0.0",
   "keywords": [
-    "Water Resources Research",
+    "Advances in Engineering Software",
     "Data Visualisation",
     "Optimisation",
     "Hydrodynamic Modelling",
