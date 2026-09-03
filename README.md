@@ -7,7 +7,7 @@ python.org/downloads/)
 This repository contains the data processing and figure generation code used in 
 the paper:
 > **"Optimising Urban Flood Resilience"**
-> *J.McKenna, C.Illiadis & V.Glenis*
+> *J.McKenna, C.Iliadis & V.Glenis*
 > Submitted to *Advances in Engineering Software* (2026).
 
 ## Overview
