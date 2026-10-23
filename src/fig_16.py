@@ -16,9 +16,9 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import MultipleLocator
 import re
 
-from utils.utils import load_mean_S_metric
-from utils.utils import natural_keys
-from utils.utils import set_plot_defaults
+from .utils.utils import load_mean_S_metric
+from .utils.utils import natural_keys
+from .utils.utils import set_plot_defaults
 
 
 def plot_fig_16(extension='pdf'):

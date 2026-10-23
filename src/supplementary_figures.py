@@ -4,18 +4,18 @@ Created on Mon Dec 22 14:23:35 2025.
 
 @author: James Mckenna
 
-~~~ appendices.py ~~~
-Code used to reproduce figures contained within the Appendices.
+~~~ supplementary_figures.py ~~~
+Code used to reproduce figures contained within the Supplementary Figures.
 """
 
 # load packages
 import os
 
-from utils.plot_solutions import plot_handler
+from .utils.plot_solutions import plot_handler
 
 
-def plot_appendices(extension='pdf'):
-    """Reproduce the appendices: flood map plots of each optimal solution.
+def plot_supplementary_figures(extension='pdf'):
+    """Reproduce the Supplementary Figures: flood maps for each solution.
 
     Produce detailed flood maps for each of the optimal solutions discovered by
     the epsilon-MOEA algorithm.
@@ -44,4 +44,4 @@ def plot_appendices(extension='pdf'):
 
 if __name__ == "__main__":
 
-    test = plot_appendices(extension='png')
+    test = plot_supplementary_figures(extension='png')

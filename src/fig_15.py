@@ -14,8 +14,8 @@ import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 
-from utils.utils import non_dominated_sort
-from utils.utils import set_plot_defaults
+from .utils.utils import non_dominated_sort
+from .utils.utils import set_plot_defaults
 
 
 def plot_fig_15(extension='pdf'):

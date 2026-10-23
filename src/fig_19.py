@@ -17,9 +17,9 @@ from matplotlib.ticker import MultipleLocator
 import re
 import pandas as pd
 
-from utils.utils import read_solutions
-from utils.utils import non_dominated_sort
-from utils.utils import set_plot_defaults
+from .utils.utils import read_solutions
+from .utils.utils import non_dominated_sort
+from .utils.utils import set_plot_defaults
 
 
 def plot_fig_19(extension='pdf'):

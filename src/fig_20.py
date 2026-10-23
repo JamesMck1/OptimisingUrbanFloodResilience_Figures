@@ -15,10 +15,10 @@ import matplotlib.pyplot as plt
 import re
 import pandas as pd
 
-from utils.utils import read_solutions
-from utils.utils import calculate_hypervolume_metric
-from utils.utils import natural_keys
-from utils.utils import set_plot_defaults
+from .utils.utils import read_solutions
+from .utils.utils import calculate_hypervolume_metric
+from .utils.utils import natural_keys
+from .utils.utils import set_plot_defaults
 
 
 def plot_fig_20(extension='pdf'):

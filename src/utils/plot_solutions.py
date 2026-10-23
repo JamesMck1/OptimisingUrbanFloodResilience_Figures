@@ -698,15 +698,17 @@ class plot_handler():
             ymax = self.geotransform[3]
 
             # initialise plot
-            _, ax_flood = plt.subplots(1, 1, figsize=(fsize_w, fsize_h),
-                                       dpi=dpi)
+            fig, ax_flood = plt.subplots(1, 1, figsize=(fsize_w, fsize_h),
+                                         dpi=dpi)
             ax_flood.set_xlim(xmin, xmax)
             ax_flood.set_ylim(ymin, ymax)
             if solution_num is None:
                 plot_title = (f'Solution ({solution_id}) ')
             else:
-                plot_title = (f'Solution {solution_num} ({solution_id}) \n'
-                              f'Cost = £{cost:.2f}, Risk = {risk:.3f}')
+                plot_title = (
+                    f'Solution {solution_num} \n'
+                    f'Estimated Whole-Life Cost = £{(cost/1e6):.1f}m \n' 
+                    f'Estimated Cost of Damages = £{risk:.1f}m')
             ax_flood.set_title(plot_title)
 
             cmap = mpl.cm.Blues
@@ -866,8 +868,20 @@ class plot_handler():
             ax_flood.legend(handles=legend_elements, loc='upper right',
                             fontsize='10')
 
-            plot_path = os.path.join(self.output_path,
-                                     f'Solution {count}.{self.extension}')
+            # add caption
+            caption_text = (
+                f"Supplementary Figure {count+1}: Maximum flood depth map for "
+                f"Solution {solution_num} with an estimated whole-life cost of "
+                f"£{(cost/1e6):.1f}m and an estimated cost of damages due to " f"flooding of £{risk:.1f}m)."
+            )
+
+            # Add caption centered below the x-axis
+            fig.text(0.5, 0.02, caption_text, ha='center', va='top', 
+                     fontsize=11, wrap=True)
+
+            plot_path = os.path.join(
+                self.output_path,
+                f'Supplementary Figure {count+1}.{self.extension}')
             plt.savefig(plot_path, dpi=dpi)
             # plt.show(block=False)
             # plt.pause(0.1)
@@ -875,7 +889,7 @@ class plot_handler():
             # Force garbage collection
             gc.collect()
             print('Flood map plotted for solution '
-                  f'{solution_num} ({solution_id}).')
+                  f'{solution_num} - Supplementary Figure {count+1}.')
 
     def _process_solution_data(self, total_length):
         """Read Solutions.txt and return a dataframe.
