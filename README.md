@@ -8,7 +8,7 @@ This repository contains the data processing and figure generation code used in
 the paper:
 > **"Optimising Urban Flood Resilience"**
 > *J.McKenna, C.Iliadis & V.Glenis*
-> Submitted to *Advances in Engineering Software* (2026).
+> Submitted to *Engineering Applications of Artificial Intelligence* (2026).
 
 ## Overview
 
@@ -32,21 +32,21 @@ the root directory. Please ensure your data directories are populated before
 running the scripts:
 
 ```text
-├── run.py                    # Master script to execute all figure generation
+├── run.py                               # Master script to execute all figure generation
 ├── src/
 │   ├── utils/
 │   │   ├── __init__.py
-│   │   └── binary_encoding.py     # Genotype <-> phenotype mapping
-│   │   └── plot_solutions.py      # Flood map plotting
-│   │   └── utils.py               # Other helper functions
-│   ├── appendices.py         # Plots the figures in the appendices
-│   ├── fig_15.py             # Plots the feasible objective space
-│   ├── fig_16.py             # Compares algorithm convergence rates (S-metric)
-│   ├── fig_17.py             # Performance for varying maximum archive sizes
-│   ├── fig_19.py             # Final solutions comparison
-│   ├── fig_20.py             # S-metric convergence per unique simulation
-│   ├── fig_22.py             # 
-├── sim_data/                 # Data for Appendices
-├── test_1_data/              # Data for Figures 15, 16, and 17
-├── test_2_data/              # Data for Figures 19 and 20
-└── figures/                  # Automatically generated output folder for plots
+│   │   └── binary_encoding.py           # Genotype <-> phenotype mapping
+│   │   └── plot_solutions.py            # Flood map plotting
+│   │   └── utils.py                     # Other helper functions
+│   ├── supplementary_figures.py         # Plots the figures in the supplementary materials
+│   ├── fig_15.py                        # Plots the feasible objective space
+│   ├── fig_16.py                        # Compares algorithm convergence rates (S-metric)
+│   ├── fig_17.py                        # Performance for varying maximum archive sizes
+│   ├── fig_19.py                        # Final solutions comparison
+│   ├── fig_20.py                        # S-metric convergence per unique simulation
+│   ├── fig_22.py                        # 
+├── sim_data/                            # Data for Supplementary Figures
+├── test_1_data/                         # Data for Figures 15, 16, and 17
+├── test_2_data/                         # Data for Figures 19 and 20
+└── figures/                             # Automatically generated output folder for plots
